@@ -59,15 +59,20 @@ namespace WebApplication1.Controllers
                 return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, "O e-mail informado já está em uso."));
             }
 
+            // Verifica os grupos
             if (userSave.GroupIds.Any())
             {
-                var groups = await _context.Groups
+                var validGroups = await _context.Groups
                     .Where(g => userSave.GroupIds.Contains(g.Id))
+                    .Select(g => g.Id)
                     .ToListAsync();
 
-                if (groups.Count != userSave.GroupIds.Count)
+                // Identifica os IDs de grupos inválidos
+                var invalidGroupIds = userSave.GroupIds.Except(validGroups).ToList();
+                if (invalidGroupIds.Any())
                 {
-                    return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, "Um ou mais IDs de grupos são inválidos."));
+                    var message = $"Um ou mais IDs de grupos são inválidos: {string.Join(", ", invalidGroupIds)}.";
+                    return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, message));
                 }
             }
 
@@ -75,7 +80,7 @@ namespace WebApplication1.Controllers
             {
                 Name = userSave.Name,
                 Email = userSave.Email,
-                Status = true,
+                Actived = true,
                 Groups = userSave.GroupIds.Select(id => new Group { Id = id }).ToList()
             };
 
@@ -107,18 +112,25 @@ namespace WebApplication1.Controllers
             user.Name = updatedUser.Name;
             user.Email = updatedUser.Email;
 
+            // Verifica os grupos
             if (updatedUser.GroupIds.Any())
             {
-                var groups = await _context.Groups
+                var validGroups = await _context.Groups
                     .Where(g => updatedUser.GroupIds.Contains(g.Id))
+                    .Select(g => g.Id)
                     .ToListAsync();
 
-                if (groups.Count != updatedUser.GroupIds.Count)
+                // Identifica os IDs de grupos inválidos
+                var invalidGroupIds = updatedUser.GroupIds.Except(validGroups).ToList();
+                if (invalidGroupIds.Any())
                 {
-                    return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, "Um ou mais IDs de grupos são inválidos."));
+                    var message = $"Um ou mais IDs de grupos são inválidos: {string.Join(", ", invalidGroupIds)}.";
+                    return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, message));
                 }
 
-                user.Groups = groups;
+                user.Groups = await _context.Groups
+                    .Where(g => updatedUser.GroupIds.Contains(g.Id))
+                    .ToListAsync();
             }
 
             _context.Entry(user).State = EntityState.Modified;
@@ -126,6 +138,7 @@ namespace WebApplication1.Controllers
 
             return NoContent();
         }
+
 
         // DELETE api/user/5
         [HttpDelete("{id}")]
@@ -145,7 +158,7 @@ namespace WebApplication1.Controllers
 
             if (user.Groups.Any())
             {
-                user.Status = false;
+                user.Actived = false;
                 _context.Entry(user).State = EntityState.Modified;
             }
             else

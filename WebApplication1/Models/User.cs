@@ -11,7 +11,7 @@ namespace WebApplication1.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public bool Status { get; set; }
+        public bool  Actived { get; set; }
 
         public ICollection<Group> Groups { get; set; }
     }

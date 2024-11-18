@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jhoni\\source\\repos\\WebApplication1\\WebApplication1.csproj": {}
+    "C:\\Users\\jhoni\\OneDrive\\Área de Trabalho\\github\\sistema_permissao\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jhoni\\source\\repos\\WebApplication1\\WebApplication1.csproj": {
+    "C:\\Users\\jhoni\\OneDrive\\Área de Trabalho\\github\\sistema_permissao\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jhoni\\source\\repos\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "C:\\Users\\jhoni\\OneDrive\\Área de Trabalho\\github\\sistema_permissao\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "C:\\Users\\jhoni\\source\\repos\\WebApplication1\\WebApplication1.csproj",
+        "projectPath": "C:\\Users\\jhoni\\OneDrive\\Área de Trabalho\\github\\sistema_permissao\\WebApplication1\\WebApplication1.csproj",
         "packagesPath": "C:\\Users\\jhoni\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jhoni\\source\\repos\\WebApplication1\\obj\\",
+        "outputPath": "C:\\Users\\jhoni\\OneDrive\\Área de Trabalho\\github\\sistema_permissao\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jhoni\\AppData\\Roaming\\NuGet\\NuGet.Config",
