@@ -66,8 +66,9 @@ jobs:
     - name: Start the API
       run: |
         echo "Starting the API..."
-        dotnet run --urls http://0.0.0.0:5000
-      working-directory: ./WebApplication1 &
+        nohup dotnet run --urls http://0.0.0.0:5000 &
+        sleep 10
+      working-directory: ./WebApplication1
       env:
         ConnectionStrings__DefaultConnection: "Server=localhost;Database=sistema;User=root;Password=;"
 
@@ -78,9 +79,16 @@ jobs:
         echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list >/dev/null
         sudo apt update && sudo apt install ngrok
         ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
-        ngrok http 5000 &
+        nohup ngrok http 5000 &
+        sleep 5
       env:
         ConnectionStrings__DefaultConnection: "Server=localhost;Database=sistema;User=root;Password=;"
 
     - name: Show ngrok public URL
-      run: curl --silent http://127.0.0.1:4040/api/tunnels | jq -r .tunnels[0].public_url
+      run: |
+        curl --silent http://127.0.0.1:4040/api/tunnels | jq -r .tunnels[0].public_url
+
+    - name: Keep job running for testing
+      run: |
+        echo "API is running. You can test it using the URL above."
+        sleep 300
