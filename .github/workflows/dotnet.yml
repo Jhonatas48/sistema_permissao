@@ -15,17 +15,15 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_DATABASE: sistema
-          MYSQL_USER: root
-          MYSQL_PASSWORD: ""
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -p''"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root"
+          --health-interval=30s
+          --health-timeout=10s
+          --health-retries=10
 
     steps:
     - uses: actions/checkout@v4
@@ -50,8 +48,18 @@ jobs:
       run: dotnet build --no-restore
       working-directory: ./WebApplication1
 
+    - name: Apply migrations (if using Entity Framework)
+      run: dotnet ef database update
+      working-directory: ./WebApplication1
+      env:
+        ConnectionStrings__DefaultConnection: "Server=127.0.0.1;Database=sistema;User=root;Password=;"
+
     - name: Test
       env:
         ConnectionStrings__DefaultConnection: "Server=127.0.0.1;Database=sistema;User=root;Password=;"
       run: dotnet test --no-build --verbosity normal
       working-directory: ./WebApplication1
+
+    - name: Print MySQL logs for debugging
+      if: failure()
+      run: docker logs $(docker ps -q -f name=mysql)
