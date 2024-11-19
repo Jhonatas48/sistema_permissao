@@ -2,5 +2,6 @@
 {
     public class SystemSave
     {
+        public string Name { get; set; }
     }
 }

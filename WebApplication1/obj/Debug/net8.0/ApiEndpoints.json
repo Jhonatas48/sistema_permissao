@@ -310,6 +310,15 @@
           "text/json"
         ],
         "StatusCode": 200
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 500
       }
     ]
   },
@@ -322,8 +331,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "system",
-        "Type": "WebApplication1.Models.System",
+        "Name": "systemSave",
+        "Type": "WebApplication1.Models.Update.SystemSave",
         "IsRequired": true
       }
     ],
@@ -335,7 +344,25 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
+        "StatusCode": 201
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 500
       }
     ]
   },
@@ -362,6 +389,24 @@
           "text/json"
         ],
         "StatusCode": 200
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 500
       }
     ]
   },
@@ -379,12 +424,45 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedSystem",
-        "Type": "WebApplication1.Models.System",
+        "Name": "systemSave",
+        "Type": "WebApplication1.Models.Update.SystemSave",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
   },
   {
     "ContainingType": "WebApplication1.Controllers.SystemController",
@@ -400,7 +478,31 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
   },
   {
     "ContainingType": "WebApplication1.Controllers.SystemController",
@@ -425,6 +527,24 @@
           "text/json"
         ],
         "StatusCode": 200
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "WebApplication1.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 500
       }
     ]
   },
