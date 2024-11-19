@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|c:\\users\\jhoni\\onedrive\\\u00E1rea de trabalho\\github\\sistema_permissao\\webapplication1\\controllers\\systemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|solutionrelative:controllers\\systemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|c:\\users\\jhoni\\onedrive\\\u00E1rea de trabalho\\github\\sistema_permissao\\webapplication1\\controllers\\groupcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|solutionrelative:controllers\\groupcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|c:\\users\\jhoni\\onedrive\\\u00E1rea de trabalho\\github\\sistema_permissao\\webapplication1\\models\\errorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|solutionrelative:models\\errorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|c:\\users\\jhoni\\onedrive\\\u00E1rea de trabalho\\github\\sistema_permissao\\webapplication1\\models\\update\\groupsave.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|solutionrelative:models\\update\\groupsave.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|c:\\users\\jhoni\\onedrive\\\u00E1rea de trabalho\\github\\sistema_permissao\\webapplication1\\models\\group.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|solutionrelative:models\\group.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -27,27 +31,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ErrorResponse.cs",
-              "DocumentMoniker": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\ErrorResponse.cs",
-              "RelativeDocumentMoniker": "Models\\ErrorResponse.cs",
-              "ToolTip": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\ErrorResponse.cs",
-              "RelativeToolTip": "Models\\ErrorResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
+              "Title": "GroupSave.cs",
+              "DocumentMoniker": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\Update\\GroupSave.cs",
+              "RelativeDocumentMoniker": "Models\\Update\\GroupSave.cs",
+              "ToolTip": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\Update\\GroupSave.cs",
+              "RelativeToolTip": "Models\\Update\\GroupSave.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-19T13:01:36.792Z",
+              "WhenOpened": "2024-11-19T13:10:54.116Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Group.cs",
+              "DocumentMoniker": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\Group.cs",
+              "RelativeDocumentMoniker": "Models\\Group.cs",
+              "ToolTip": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\Group.cs",
+              "RelativeToolTip": "Models\\Group.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA3wBcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-19T13:08:31.721Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SystemController.cs",
-              "DocumentMoniker": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Controllers\\SystemController.cs",
-              "RelativeDocumentMoniker": "Controllers\\SystemController.cs",
-              "ToolTip": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Controllers\\SystemController.cs",
-              "RelativeToolTip": "Controllers\\SystemController.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAIwEAAAAA0AAAAAAAAAA==",
+              "Title": "GroupController.cs",
+              "DocumentMoniker": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Controllers\\GroupController.cs",
+              "RelativeDocumentMoniker": "Controllers\\GroupController.cs",
+              "ToolTip": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Controllers\\GroupController.cs",
+              "RelativeToolTip": "Controllers\\GroupController.cs",
+              "ViewState": "AgIAAMUAAAAAAAAAAAAAAM0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T23:18:45.374Z",
+              "WhenOpened": "2024-11-19T13:07:59.147Z",
               "EditorCaption": ""
             }
           ]

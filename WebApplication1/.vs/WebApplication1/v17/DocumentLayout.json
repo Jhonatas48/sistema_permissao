@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|c:\\users\\jhoni\\onedrive\\\u00E1rea de trabalho\\github\\sistema_permissao\\webapplication1\\controllers\\systemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|solutionrelative:controllers\\systemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|c:\\users\\jhoni\\onedrive\\\u00E1rea de trabalho\\github\\sistema_permissao\\webapplication1\\models\\errorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6F397E4D-37E5-444D-A7D0-83F1F2417F71}|WebApplication1.csproj|solutionrelative:models\\errorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,37 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ErrorResponse.cs",
-              "DocumentMoniker": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\ErrorResponse.cs",
-              "RelativeDocumentMoniker": "Models\\ErrorResponse.cs",
-              "ToolTip": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Models\\ErrorResponse.cs",
-              "RelativeToolTip": "Models\\ErrorResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-19T13:01:36.792Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SystemController.cs",
-              "DocumentMoniker": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Controllers\\SystemController.cs",
-              "RelativeDocumentMoniker": "Controllers\\SystemController.cs",
-              "ToolTip": "C:\\Users\\jhoni\\OneDrive\\\u00C1rea de Trabalho\\github\\sistema_permissao\\WebApplication1\\Controllers\\SystemController.cs",
-              "RelativeToolTip": "Controllers\\SystemController.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAIwEAAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T23:18:45.374Z",
-              "EditorCaption": ""
             }
           ]
         }

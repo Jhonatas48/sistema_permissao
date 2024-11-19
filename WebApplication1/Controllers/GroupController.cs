@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Context;
 using WebApplication1.Models;
+using WebApplication1.Models.Update;
 
 namespace WebApplication1.Controllers
 {
@@ -18,21 +19,32 @@ namespace WebApplication1.Controllers
 
         // GET: api/group
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Group>>> Get()
         {
-            return await _context.Groups.Include(g => g.Systems).ToListAsync();
+            return await _context.Groups
+                .Where(g => g.Actived)
+                .Include(g => g.Systems)
+                .Include(g => g.Permissions)
+                .ToListAsync();
         }
 
         // GET api/group/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Group>> Get(int id)
         {
-            var group = await _context.Groups.Include(g => g.Systems)
-                                             .FirstOrDefaultAsync(g => g.Id == id);
+            var group = await _context.Groups
+                .Include(g => g.Systems)
+                .Include(g => g.Permissions)
+                .FirstOrDefaultAsync(g => g.Id == id && g.Actived);
 
             if (group == null)
             {
-                return NotFound();
+                return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, "Grupo não encontrado ou está inativo."));
             }
 
             return group;
@@ -40,23 +52,120 @@ namespace WebApplication1.Controllers
 
         // POST api/group
         [HttpPost]
-        public async Task<ActionResult<Group>> Post([FromBody] Group group)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Group>> Post([FromBody] GroupSave groupSave)
         {
+            // Verifica se já existe um grupo com o mesmo nome
+            if (await _context.Groups.AnyAsync(g => g.Name == groupSave.Name))
+            {
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, "Já existe um grupo com este nome."));
+            }
+
+            // Valida os sistemas fornecidos
+            var validSystems = await _context.Systems
+                .Where(s => groupSave.Systems.Contains(s.Id) && s.Actived)
+                .Select(s => s.Id)
+                .ToListAsync();
+            var invalidSystems = groupSave.Systems.Except(validSystems).ToList();
+
+            // Valida as permissões fornecidas
+            var validPermissions = await _context.Permissions
+                .Where(p => groupSave.Permissions.Contains(p.Id))
+                .Select(p => p.Id)
+                .ToListAsync();
+            var invalidPermissions = groupSave.Permissions.Except(validPermissions).ToList();
+
+            if (invalidSystems.Any() || invalidPermissions.Any())
+            {
+                var errorMessage = new List<string>();
+                if (invalidSystems.Any())
+                {
+                    errorMessage.Add($"Sistemas inválidos: {string.Join(", ", invalidSystems)}.");
+                }
+                if (invalidPermissions.Any())
+                {
+                    errorMessage.Add($"Permissões inválidas: {string.Join(", ", invalidPermissions)}.");
+                }
+
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, string.Join(" ", errorMessage)));
+            }
+
+            var group = new Group
+            {
+                Name = groupSave.Name,
+                Description = groupSave.Description,
+                Actived = true,
+                Systems = await _context.Systems.Where(s => validSystems.Contains(s.Id)).ToListAsync(),
+                Permissions = await _context.Permissions.Where(p => validPermissions.Contains(p.Id)).ToListAsync()
+            };
+
             _context.Groups.Add(group);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(Get), new { id = group.Id }, group);
         }
 
         // PUT api/group/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Group updatedGroup)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put(int id, [FromBody] GroupSave groupSave)
         {
-            if (id != updatedGroup.Id)
+            var existingGroup = await _context.Groups
+                .Include(g => g.Systems)
+                .Include(g => g.Permissions)
+                .FirstOrDefaultAsync(g => g.Id == id && g.Actived);
+
+            if (existingGroup == null)
             {
-                return BadRequest();
+                return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, "Grupo não encontrado ou está inativo."));
             }
 
-            _context.Entry(updatedGroup).State = EntityState.Modified;
+            // Verifica se o nome já está em uso por outro grupo
+            if (await _context.Groups.AnyAsync(g => g.Name == groupSave.Name && g.Id != id))
+            {
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, "Já existe um grupo com este nome."));
+            }
+
+            // Valida os sistemas fornecidos
+            var validSystems = await _context.Systems
+                .Where(s => groupSave.Systems.Contains(s.Id) && s.Actived)
+                .Select(s => s.Id)
+                .ToListAsync();
+            var invalidSystems = groupSave.Systems.Except(validSystems).ToList();
+
+            // Valida as permissões fornecidas
+            var validPermissions = await _context.Permissions
+                .Where(p => groupSave.Permissions.Contains(p.Id))
+                .Select(p => p.Id)
+                .ToListAsync();
+            var invalidPermissions = groupSave.Permissions.Except(validPermissions).ToList();
+
+            if (invalidSystems.Any() || invalidPermissions.Any())
+            {
+                var errorMessage = new List<string>();
+                if (invalidSystems.Any())
+                {
+                    errorMessage.Add($"Sistemas inválidos: {string.Join(", ", invalidSystems)}.");
+                }
+                if (invalidPermissions.Any())
+                {
+                    errorMessage.Add($"Permissões inválidas: {string.Join(", ", invalidPermissions)}.");
+                }
+
+                return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, string.Join(" ", errorMessage)));
+            }
+
+            existingGroup.Name = groupSave.Name;
+            existingGroup.Description = groupSave.Description;
+            existingGroup.Systems = await _context.Systems.Where(s => validSystems.Contains(s.Id)).ToListAsync();
+            existingGroup.Permissions = await _context.Permissions.Where(p => validPermissions.Contains(p.Id)).ToListAsync();
+
+            _context.Entry(existingGroup).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -64,64 +173,30 @@ namespace WebApplication1.Controllers
 
         // DELETE api/group/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
-            var group = await _context.Groups.FindAsync(id);
+            var group = await _context.Groups
+                .Include(g => g.Systems)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
             if (group == null)
             {
-                return NotFound();
+                return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, "Grupo não encontrado."));
             }
 
-            _context.Groups.Remove(group);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        // GET api/group/5/systems
-        [HttpGet("{id}/systems")]
-        public async Task<ActionResult<IEnumerable<WebApplication1.Models.System>>> GetGroupSystems(int id)
-        {
-            var group = await _context.Groups.Include(g => g.Systems).FirstOrDefaultAsync(g => g.Id == id);
-            if (group == null)
+            if (group.Systems.Any())
             {
-                return NotFound();
+                group.Actived = false; // Marca como inativo
+                _context.Entry(group).State = EntityState.Modified;
             }
-
-            return Ok(group.Systems);
-        }
-
-        // POST api/group/5/systems/1
-        [HttpPost("{id}/systems/{systemId}")]
-        public async Task<IActionResult> AddGroupSystem(int id, int systemId)
-        {
-            var group = await _context.Groups.Include(g => g.Systems).FirstOrDefaultAsync(g => g.Id == id);
-            var system = await _context.Systems.FindAsync(systemId);
-
-            if (group == null || system == null)
+            else
             {
-                return NotFound();
+                _context.Groups.Remove(group); // Remove o grupo se não houver sistemas vinculados
             }
 
-            group.Systems.Add(system);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        // DELETE api/group/5/systems/1
-        [HttpDelete("{id}/systems/{systemId}")]
-        public async Task<IActionResult> RemoveGroupSystem(int id, int systemId)
-        {
-            var group = await _context.Groups.Include(g => g.Systems).FirstOrDefaultAsync(g => g.Id == id);
-            var system = group?.Systems.FirstOrDefault(s => s.Id == systemId);
-
-            if (group == null || system == null)
-            {
-                return NotFound();
-            }
-
-            group.Systems.Remove(system);
             await _context.SaveChangesAsync();
 
             return NoContent();
