@@ -33,6 +33,13 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Install Entity Framework CLI
+      run: dotnet tool install --global dotnet-ef
+
+    - name: Add EF CLI to PATH
+      shell: bash
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
     - name: Wait for MySQL
       run: |
         echo "Waiting for MySQL to be healthy..."
