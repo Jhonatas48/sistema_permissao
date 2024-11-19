@@ -1,4 +1,4 @@
-name: .NET
+name: .NET with MySQL
 
 on:
   push:
@@ -11,6 +11,22 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: sistema
+          MYSQL_USER: root
+          MYSQL_PASSWORD: ""
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -p''"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
     - uses: actions/checkout@v4
 
@@ -18,6 +34,13 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
+    - name: Wait for MySQL
+      run: |
+        echo "Waiting for MySQL to be healthy..."
+        until [ "$(docker inspect --format='{{.State.Health.Status}}' build_mysql)" == "healthy" ]; do
+          sleep 5
+        done
 
     - name: Restore dependencies
       run: dotnet restore
@@ -28,5 +51,7 @@ jobs:
       working-directory: ./WebApplication1
 
     - name: Test
+      env:
+        ConnectionStrings__DefaultConnection: "Server=127.0.0.1;Database=sistema;User=root;Password=;"
       run: dotnet test --no-build --verbosity normal
       working-directory: ./WebApplication1
