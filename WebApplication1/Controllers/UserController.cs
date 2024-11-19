@@ -26,7 +26,13 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            return await _context.Users.Include(u => u.Groups).ToListAsync();
+            // Inclui os grupos, sistemas e permissões associados
+            return await _context.Users
+                .Include(u => u.Groups)
+                    .ThenInclude(g => g.Systems) // Inclui os sistemas dos grupos
+                .Include(u => u.Groups)
+                    .ThenInclude(g => g.Permissions) // Inclui as permissões dos grupos
+                .ToListAsync();
         }
 
         // GET api/user/5
@@ -36,8 +42,13 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> Get(int id)
         {
-            var user = await _context.Users.Include(u => u.Groups)
-                                           .FirstOrDefaultAsync(u => u.Id == id);
+            // Inclui os grupos, sistemas e permissões associados
+            var user = await _context.Users
+                .Include(u => u.Groups)
+                    .ThenInclude(g => g.Systems) // Inclui os sistemas dos grupos
+                .Include(u => u.Groups)
+                    .ThenInclude(g => g.Permissions) // Inclui as permissões dos grupos
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
             {
@@ -46,6 +57,7 @@ namespace WebApplication1.Controllers
 
             return user;
         }
+
 
         // POST api/user
         [HttpPost]
@@ -59,30 +71,35 @@ namespace WebApplication1.Controllers
                 return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, "O e-mail informado já está em uso."));
             }
 
-            // Verifica os grupos
-            if (userSave.GroupIds.Any())
-            {
-                var validGroups = await _context.Groups
-                    .Where(g => userSave.GroupIds.Contains(g.Id))
-                    .Select(g => g.Id)
-                    .ToListAsync();
-
-                // Identifica os IDs de grupos inválidos
-                var invalidGroupIds = userSave.GroupIds.Except(validGroups).ToList();
-                if (invalidGroupIds.Any())
-                {
-                    var message = $"Um ou mais IDs de grupos são inválidos: {string.Join(", ", invalidGroupIds)}.";
-                    return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, message));
-                }
-            }
-
             var user = new User
             {
                 Name = userSave.Name,
                 Email = userSave.Email,
                 Actived = true,
-                Groups = userSave.GroupIds.Select(id => new Group { Id = id }).ToList()
+                Groups = new List<Group>()
             };
+
+            // Verifica os grupos
+            if (userSave.GroupIds.Any())
+            {
+
+                var groups = await _context.Groups
+                    .Where(g => userSave.GroupIds.Contains(g.Id) && g.Actived)
+                    .ToListAsync();
+
+                var validGroupIds = groups.Select(g => g.Id).ToList();
+
+                // Identifica os IDs de grupos inválidos
+                var invalidGroupIds = userSave.GroupIds.Except(validGroupIds).ToList();
+                if (invalidGroupIds.Any())
+                {
+                    var message = $"Um ou mais IDs de grupos são inválidos ou estão inativos: {string.Join(", ", invalidGroupIds)}.";
+                    return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, message));
+                }
+
+                // Associa os grupos encontrados ao usuário
+                user.Groups = groups;
+            }
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -98,7 +115,10 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put(int id, [FromBody] UserSave updatedUser)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(u => u.Groups)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
             if (user == null)
             {
                 return NotFound(new ErrorResponse(StatusCodes.Status404NotFound, "Usuário não encontrado."));
@@ -115,22 +135,28 @@ namespace WebApplication1.Controllers
             // Verifica os grupos
             if (updatedUser.GroupIds.Any())
             {
-                var validGroups = await _context.Groups
-                    .Where(g => updatedUser.GroupIds.Contains(g.Id))
-                    .Select(g => g.Id)
+                // Busca os grupos ativos com os IDs fornecidos
+                var groups = await _context.Groups
+                    .Where(g => updatedUser.GroupIds.Contains(g.Id) && g.Actived)
                     .ToListAsync();
 
+                var validGroupIds = groups.Select(g => g.Id).ToList();
+
                 // Identifica os IDs de grupos inválidos
-                var invalidGroupIds = updatedUser.GroupIds.Except(validGroups).ToList();
+                var invalidGroupIds = updatedUser.GroupIds.Except(validGroupIds).ToList();
                 if (invalidGroupIds.Any())
                 {
-                    var message = $"Um ou mais IDs de grupos são inválidos: {string.Join(", ", invalidGroupIds)}.";
+                    var message = $"Um ou mais IDs de grupos são inválidos ou estão inativos: {string.Join(", ", invalidGroupIds)}.";
                     return BadRequest(new ErrorResponse(StatusCodes.Status400BadRequest, message));
                 }
 
-                user.Groups = await _context.Groups
-                    .Where(g => updatedUser.GroupIds.Contains(g.Id))
-                    .ToListAsync();
+                // Atualiza os grupos associados ao usuário
+                user.Groups = groups;
+            }
+            else
+            {
+                // Se nenhum grupo for fornecido, remove todas as associações
+                user.Groups.Clear();
             }
 
             _context.Entry(user).State = EntityState.Modified;
@@ -138,6 +164,7 @@ namespace WebApplication1.Controllers
 
             return NoContent();
         }
+
 
 
         // DELETE api/user/5
