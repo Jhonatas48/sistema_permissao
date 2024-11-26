@@ -10,11 +10,11 @@ namespace WebApplication1.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public bool Actived { get; set; }
 
         [JsonIgnore]
-        public ICollection<Group> Groups { get; set; }
+        public ICollection<Group>? Groups { get; set; }
 
         
     }
